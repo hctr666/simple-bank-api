@@ -1,5 +1,5 @@
 const EventService = require('../services/event.service');
-const { DEPOSIT, WITHDRAW } = require('../models/event.model');
+const { EventTypes } = require('../models/event.model');
 
 function EventController() {
   const eventService = new EventService();
@@ -19,12 +19,16 @@ function EventController() {
 
     try {
 
-      if (type === DEPOSIT) {
+      if (type === EventTypes.DEPOSIT) {
         result = processDeposit({ destination, amount });
       }
 
-      if (type === WITHDRAW) {
+      if (type === EventTypes.WITHDRAW) {
         result = processWithdraw({ origin, amount });
+      }
+
+      if (type === EventTypes.TRANSFER) {
+        result = processTransfer({ origin, amount, destination });
       }
 
       if (result) return res.json(201, result)
@@ -33,8 +37,9 @@ function EventController() {
 
     } catch (error) {
       console.error(error);
-      return res.text(500, 'Internal server error');
     }
+
+    return res.text(500, 'Internal server error');
   }
 
   function processDeposit(depositInput) {
@@ -42,7 +47,7 @@ function EventController() {
 
     if (result) {
       return {
-        destination: result
+        destination: result.destination
       };
     }
 
@@ -54,11 +59,22 @@ function EventController() {
 
     if (result) {
       return {
-        origin: result
+        origin: result.origin
       };
     }
 
     return null;
+  }
+
+  function processTransfer(transferInputs) {
+    const result = eventService.transfer(transferInputs);
+
+    if (result) {
+      return {
+        origin: result.origin,
+        destination: result.destination
+      }
+    }
   }
 
   return {

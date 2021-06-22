@@ -23,11 +23,10 @@ function BalanceController() {
       return res.text(404, 0);
 
     } catch (error) {
-      console.log({error});
-      return res.json(500, {
-        error: error.message
-      });
+      console.error(error);
     }
+
+    return res.text(500, error.message);
   }
 
   return {

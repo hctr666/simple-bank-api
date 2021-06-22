@@ -1,10 +1,19 @@
 const DEPOSIT = 'deposit';
 const WITHDRAW = 'withdraw';
+const TRANSFER = 'transfer';
 
 function Event(type, { destination, origin, amount }) {
   if (type === DEPOSIT) {
     return {
       destination: `${destination}`,
+      amount
+    }
+  }
+
+  if (type === TRANSFER) {
+    return {
+      destination: `${destination}`,
+      origin: `${origin}`,
       amount
     }
   }
@@ -17,6 +26,9 @@ function Event(type, { destination, origin, amount }) {
 
 module.exports = {
   Event,
-  DEPOSIT,
-  WITHDRAW
+  EventTypes: {
+    DEPOSIT,
+    WITHDRAW,
+    TRANSFER
+  }
 };
