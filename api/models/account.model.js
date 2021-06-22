@@ -3,8 +3,8 @@ const LocalDB = require('../../lib/db');
 
 const db = new LocalDB('accounts');
 
-function Account(balance) {
-  const id = getIncrementaId(db.all());
+function Account(_id, balance) {
+  const id = _id || getIncrementaId(db.all());
   return {
     id,
     balance
