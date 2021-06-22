@@ -14,7 +14,7 @@ function BalanceController() {
   function getAccountBalance(req, res) {
     try {
       const accountId = req.query.account_id;
-      const account = accountService.find(parseInt(accountId));
+      const account = accountService.find(`${accountId}`);
 
       if (account) {
         return res.text(200, account.balance);
