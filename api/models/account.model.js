@@ -1,8 +1,10 @@
 const getIncrementaId = require('../helpers/getIncrementalId');
-const { accounts } = require('../../store.json');
+const LocalDB = require('../../lib/db');
+
+const db = new LocalDB('accounts');
 
 function Account(balance) {
-  const id = getIncrementaId(accounts);
+  const id = getIncrementaId(db.all());
   return {
     id,
     balance
