@@ -6,9 +6,9 @@ function EventService() {
 
   function deposit(inputs) {
     const { destination, amount } = new Event(DEPOSIT, inputs);
-    const current = accountService.find(destination);
+    const account = accountService.find(destination);
 
-    if (!current) {
+    if (!account) {
       return accountService.create({
         id: destination,
         balance: amount
@@ -16,11 +16,19 @@ function EventService() {
     }
 
     return accountService.update(destination, {
-      balance: current.balance + amount
+      balance: account.balance + amount
     });
   }
 
   function withDraw(inputs) {
+    const { origin, amount } = new Event(WITHDRAW, inputs);
+    const account = accountService.find(origin);
+
+    if (!account) return false;
+
+    return accountService.update(origin, {
+      balance: account.balance - amount
+    });
   }
 
   return {

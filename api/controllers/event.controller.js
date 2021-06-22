@@ -27,9 +27,9 @@ function EventController() {
         result = processWithdraw({ origin, amount });
       }
 
-      if (result) return res.json(201, result);
+      if (result) return res.json(201, result)
 
-      return res.text(500, 'Unable to process the event');
+      return res.text(404, 0);
 
     } catch (error) {
       console.error(error);
