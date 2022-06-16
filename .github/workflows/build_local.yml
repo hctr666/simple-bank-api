@@ -1,7 +1,7 @@
-name: Action demo
+name: Build local
 on: [push]
 jobs:
-  Explore:
+  demo:
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
@@ -15,8 +15,3 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: api-file
-          path: api.zip
