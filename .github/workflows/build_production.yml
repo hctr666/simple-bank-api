@@ -1,6 +1,8 @@
 name: Build production
 on:
   workflow_dispatch:
+    branches:
+      - github-actions
     inputs:
       env:
         description: 'Environment'
