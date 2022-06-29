@@ -14,7 +14,7 @@ jobs:
   bump-version:
     runs-on: ubuntu-latest
     outputs:
-      version: steps.bump-version.outputs.VERSION
+      version: ${{ steps.bump-version.outputs.VERSION }}
     steps:
       - name: Check out source
         uses: actions/checkout@v2
@@ -33,7 +33,7 @@ jobs:
 
       - name: Push latest version
         run: |
-          echo ${{ steps.bump-version.outputs.VERSION }}
+          echo ${{ outputs.version }}
 
   build:
     runs-on: ubuntu-latest
