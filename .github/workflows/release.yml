@@ -78,5 +78,5 @@ jobs:
 
       - name: Create Release
         run: |
-          echo $(ls -R)
+          echo $(ls)
         # run: gh release create ${{ env.TAG }} ${{ env.ARTIFACT }} --generate-notes
