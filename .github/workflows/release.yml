@@ -66,7 +66,7 @@ jobs:
     needs: [build-production]
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      ARTIFACT: ${{ needs.build-production.outputs.artifact }}
+      FILENAME: ${{ needs.build-production.outputs.artifact }}
       TAG: ${{ needs.build-production.outputs.tag }}
     steps:
       - name: Checkout
@@ -75,10 +75,12 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
-          name: ${{ env.ARTIFACT }}
+          name: ${{ env.FILENAME }}
           path: dist
+
+      - run: npm run build:zip
 
       - name: Create Release
         run: |
           echo $(ls dist)
-        # run: gh release create ${{ env.TAG }} ${{ env.ARTIFACT }} --generate-notes
+        # run: gh release create ${{ env.TAG }} ${{ env.FILENAME }} --generate-notes

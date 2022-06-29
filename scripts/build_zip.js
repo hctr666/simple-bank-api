@@ -2,15 +2,15 @@ const { promisify } = require('util')
 const exec = promisify(require('child_process').exec)
 const path = require('path')
 
-const FILENAME = process.env.FILENAME || 'api.zip'
-const API_PATH = path.join(__dirname, '../api')
+const FILENAME = process.env.FILENAME || 'api'
+const API_PATH = path.resolve(process.cwd(), 'dist')
 
 const buildZip = async () => {
   try {
     console.log('\nPacking zip file...')
 
     const { stderr, stdout } = await exec(
-      `cd ${API_PATH} && zip -r -9 ${FILENAME} . && mv ${FILENAME} ${process.cwd()}/${FILENAME}`
+      `cd ${API_PATH} && zip -r -9 ${FILENAME}.zip .`
     )
 
     if (!stderr) {
