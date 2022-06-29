@@ -31,7 +31,7 @@ jobs:
 
       - name: Push latest version
         run: |
-          echo ${{ steps.bump_version.VERSION }}
+          echo ${{ steps.bump_version.outputs.VERSION }}
 
   build:
     runs-on: ubuntu-latest
