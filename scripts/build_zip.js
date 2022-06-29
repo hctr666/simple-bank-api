@@ -2,7 +2,7 @@ const { promisify } = require('util')
 const exec = promisify(require('child_process').exec)
 const path = require('path')
 
-const FILENAME = 'api.zip'
+const FILENAME = process.env.FILENAME || 'api.zip'
 const API_PATH = path.join(__dirname, '../api')
 
 const buildZip = async () => {
