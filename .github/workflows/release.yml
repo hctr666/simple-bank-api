@@ -77,7 +77,8 @@ jobs:
           name: ${{ env.ARTIFACT }}
 
       - name: Create Release
-        run: gh release create ${{ env.TAG }} ${{ env.ARTIFACT }} --generate-notes
+        run: echo $(ls -la)
+        # run: gh release create ${{ env.TAG }} ${{ env.ARTIFACT }} --generate-notes
 
       # - name: 'Download artifact'
       #   uses: actions/github-script@v6          
