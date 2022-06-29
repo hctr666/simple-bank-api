@@ -23,13 +23,15 @@ jobs:
           git config user.email 'hctr666@gmail.com'
 
       - name: Bump version
+        id: bump_version
         run: |
-          new_version=$(echo "$(npm version patch -git-tag-version=false)" | cut -dv -f2)
-          git commit -am "Version bump -> $new_version"
-          git log
+          version=$(echo "$(npm version patch -git-tag-version=false)" | cut -dv -f2)
+          git commit -am "Version bump -> $version"
+          ::set-output name=VERSION::${{ version }}
 
       - name: Push latest version
-        run: git push origin github-actions --follow-tags
+        run: |
+          echo ${{ steps.bump_version.VERSION }}
 
   build:
     runs-on: ubuntu-latest
