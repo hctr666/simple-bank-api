@@ -2,17 +2,27 @@ name: Build production
 on:
   workflow_dispatch:
     inputs:
-      env:
-        description: 'Environment'
-        required: true
-        default: 'staging'
       version:
-        description: 'Version'
+        description: 'Version type'
         required: true
-        default: ''
+        type: choice
+        options: 
+          - patch
+          - minor
+          - major
 jobs:
-  demo:
+  bump-version:
     runs-on: ubuntu-latest
+    steps:
+      - name: Bump version
+        run: npm version ${{ github.event.inputs.version }}
+
+      - name: Push latest version
+        run: git push origin main --follow-tags
+
+  build:
+    runs-on: ubuntu-latest
+    needs: bump-version
     env:
       FILENAME: "extension-${{ github.event.inputs.env }}-${{ github.event.inputs.version }}"
     steps:
