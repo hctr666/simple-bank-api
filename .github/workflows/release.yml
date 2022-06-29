@@ -1,0 +1,16 @@
+name: Create Release
+
+on: 
+  workflow_run:
+    workflows: [Build production]
+    types: [completed]
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - run: echo "Create new release ${{ github.ref }}"
