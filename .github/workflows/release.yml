@@ -83,4 +83,4 @@ jobs:
       - name: Create Release
         run: |
           echo $(ls dist)
-        # run: gh release create ${{ env.TAG }} ${{ env.FILENAME }} --generate-notes
+          gh release create ${{ env.TAG }} dist/${{ env.FILENAME }} --generate-notes
