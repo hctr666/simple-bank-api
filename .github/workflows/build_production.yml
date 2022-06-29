@@ -1,21 +1,24 @@
 name: Build production
-on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version type'
-        required: true
-        type: choice
-        options: 
-          - patch
-          - minor
-          - major
+on: [push]
+  # workflow_dispatch:
+  #   inputs:
+  #     version:
+  #       description: 'Version type'
+  #       required: true
+  #       type: choice
+  #       options: 
+  #         - patch
+  #         - minor
+  #         - major
 jobs:
   bump-version:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out source
+        uses: actions/checkout@v2
+
       - name: Bump version
-        run: npm version ${{ github.event.inputs.version }}
+        run: npm version patch
 
       - name: Push latest version
         run: git push origin main --follow-tags
