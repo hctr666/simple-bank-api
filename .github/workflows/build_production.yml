@@ -27,7 +27,7 @@ jobs:
         run: |
           version=$(echo "$(npm version patch -git-tag-version=false)" | cut -dv -f2)
           git commit -am "Version bump -> $version"
-          ::set-output name=VERSION::$version
+          echo "::set-output name=VERSION::$version"
 
       - name: Push latest version
         run: |
