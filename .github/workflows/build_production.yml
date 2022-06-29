@@ -24,8 +24,8 @@ jobs:
 
       - name: Bump version
         run: |
-          NEW_VERSION = $(npm version patch -git-tag-version=false)
-          git commit -am "Version bump - $NEW_VERSION"
+          new_version=$(echo "$(npm version patch -git-tag-version=false)" | cut -dv -f2)
+          git commit -am "Version bump -> $new_version"
           git log
 
       - name: Push latest version
