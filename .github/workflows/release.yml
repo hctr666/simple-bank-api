@@ -1,16 +1,81 @@
 name: Create Release
 
-on: 
-  workflow_run:
-    workflows: [Build production]
-    types: [completed]
+on: [push]
+  # workflow_run:
+  #   workflows: [Build production]
+  #   types: [completed]
 
 jobs:
-  release:
+  bump-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.bump-version.outputs.VERSION }}
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v2
+
+      - name: Setup Git
+        run: |
+          git config user.name 'hctr666'
+          git config user.email 'hctr666@gmail.com'
+
+      - name: Bump version
+        id: bump-version
+        run: |
+          version=$(echo "$(npm version patch -git-tag-version=false)" | cut -dv -f2)
+          git commit -am "Version bump -> $version"
+          echo "::set-output name=VERSION::$version"
+
+      - name: Push latest version
+        run: |
+          git push origin github-actions --follow-tags
+          echo ${{ steps.bump-version.outputs.VERSION }}
+
+  build-production:
+    runs-on: ubuntu-latest
+    needs: [bump-version]
+    outputs:
+      artifact: ${{ env.FILENAME }}
+    env:
+      TAG_NAME: ${{ needs.bump-version.outputs.version }}
+      FILENAME: "extension@${{ needs.bump-version.outputs.version }}"
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+      - name: Archive production artifacts
+        id: artifact-upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.FILENAME }}
+          path: api.zip
+
+  create-release:
     name: Create Release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.FILENAME }}
+
+      - name: Create Release
+        run: gh release create ${{ github.ref }} ${{ env.FILENAME }} --generate-notes
+
+      # - name: 'Download artifact'
+      #   uses: actions/github-script@v6          
       
-      - run: echo "Create new release ${{ github.ref }}"
+      # - run: |
+      #     echo "Create new release ${{ github.ref }}"
+      #     gh release create ${{ github.ref }} --generate-notes

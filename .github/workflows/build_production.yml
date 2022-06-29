@@ -1,15 +1,15 @@
 name: Build production
-on: [push]
-  # workflow_dispatch:
-  #   inputs:
-  #     version:
-  #       description: 'Version type'
-  #       required: true
-  #       type: choice
-  #       options: 
-  #         - patch
-  #         - minor
-  #         - major
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version type'
+        required: true
+        type: choice
+        options: 
+          - patch
+          - minor
+          - major
 jobs:
   bump-version:
     runs-on: ubuntu-latest
@@ -39,6 +39,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     needs: [bump-version]
+    outputs:
+      artifact: ${{ env.FILENAME }}
     env:
       TAG_NAME: ${{ needs.bump-version.outputs.version }}
       FILENAME: "extension@${{ needs.bump-version.outputs.version }}"
@@ -55,6 +57,7 @@ jobs:
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
       - name: Archive production artifacts
+        id: artifact-upload
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.FILENAME }}
