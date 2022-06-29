@@ -58,7 +58,6 @@ jobs:
         with:
           name: ${{ env.FILENAME }}
           path: api
-      - run: mkdir temp-folder
 
   create-release:
     name: Create Release
@@ -83,4 +82,4 @@ jobs:
       - name: Create Release
         run: |
           echo $(ls dist)
-          gh release create ${{ env.TAG }} dist/${{ env.FILENAME }} --generate-notes
+          gh release create ${{ env.TAG }} dist/${{ env.FILENAME }}.zip --generate-notes
