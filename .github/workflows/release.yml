@@ -58,6 +58,7 @@ jobs:
         with:
           name: ${{ env.FILENAME }}
           path: api
+      - run: mkdir temp-folder
 
   create-release:
     name: Create Release
