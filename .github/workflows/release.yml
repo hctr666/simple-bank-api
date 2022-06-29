@@ -28,9 +28,12 @@ jobs:
 
       - name: Bump version
         id: bump-version
+        # run: |
+        #   version=$(echo "$(npm version ${{ github.event.inputs.version-type }} -git-tag-version=false)" | cut -dv -f2)
+        #   git commit -am "Version bump -> $version"
+        #   echo "::set-output name=VERSION::$version"
         run: |
-          version=$(echo "$(npm version ${{ github.event.inputs.version-type }} -git-tag-version=false)" | cut -dv -f2)
-          git commit -am "Version bump -> $version"
+          version=$(echo "$(npm version ${{ github.event.inputs.version-type }}" | cut -dv -f2)
           echo "::set-output name=VERSION::$version"
 
       - name: Push latest version
