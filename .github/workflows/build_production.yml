@@ -28,7 +28,7 @@ jobs:
           git log
 
       - name: Push latest version
-        run: git push origin main --follow-tags
+        run: git push origin github-actions --follow-tags
 
   build:
     runs-on: ubuntu-latest
