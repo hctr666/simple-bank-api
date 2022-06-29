@@ -33,6 +33,7 @@ jobs:
 
       - name: Push latest version
         run: |
+          git push origin github-actions --follow-tags
           echo ${{ steps.bump-version.outputs.VERSION }}
 
   build:
